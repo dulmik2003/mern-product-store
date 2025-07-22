@@ -1,4 +1,4 @@
-import { EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 
 import {
 	Box,
@@ -30,12 +30,12 @@ const ProductCard = ({ product }) => {
 	const textColor = useColorModeValue("gray.600", "gray.200");
 	const bg = useColorModeValue("white", "gray.800");
 
-	const { updateProduct } = useProductStore();
+	const { deleteProduct, updateProduct } = useProductStore();
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const handleUpdateProduct = async (pid, updatedProduct) => {
-		const { success, message } = await updateProduct(pid, updatedProduct);
+	const handleUpdateProduct = async (productId, updatedProduct) => {
+		const { success, message } = await updateProduct(productId, updatedProduct);
 		onClose();
 		if (!success) {
 			toast({
@@ -49,6 +49,27 @@ const ProductCard = ({ product }) => {
 			toast({
 				title: "Success",
 				description: "Product updated successfully",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const handleDeleteProduct = async (productId) => {
+		const { success, message } = await deleteProduct(productId);
+		if (!success) {
+			toast({
+				title: "Error",
+				description: message,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
+		} else {
+			toast({
+				title: "Success",
+				description: message,
 				status: "success",
 				duration: 3000,
 				isClosable: true,
@@ -78,6 +99,12 @@ const ProductCard = ({ product }) => {
 
 				<HStack spacing={2}>
 					<IconButton icon={<EditIcon />} onClick={onOpen} colorScheme='blue' />
+
+					<IconButton
+						icon={<DeleteIcon />}
+						onClick={() => handleDeleteProduct(product._id)}
+						colorScheme='red'
+					/>
 				</HStack>
 			</Box>
 
@@ -119,7 +146,7 @@ const ProductCard = ({ product }) => {
 						>
 							Update
 						</Button>
-						
+
 						<Button variant='ghost' onClick={onClose}>
 							Cancel
 						</Button>
