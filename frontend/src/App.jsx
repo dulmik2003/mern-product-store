@@ -1,12 +1,12 @@
-import { Button } from "@chakra-ui/react"
-
+import { Box, useColorModeValue } from "@chakra-ui/react";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <>
-      <Button>Hello</Button>
-    </>
-  )
+    <Box minH={"100vh"} bg={useColorModeValue("gray.100", "gray.900")}>
+      <Navbar />
+    </Box>
+  );
 }
 
-export default App
+export default App;
